@@ -1,31 +1,40 @@
-app = "flyscale"
+# fly.toml app configuration file generated for flyscale on 2025-11-07T19:45:15+05:30
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
-primary_region = "nrt"
-kill_signal = "SIGINT"
-kill_timeout = "5s"
-
-[build]
-  image = "ghcr.io/spotsnel/flyscale:latest"
-
-[env]
-  PORT="41641"
-# create a reusable or ephemeral auth key
-# ephemeral auth key are not working for use as exit node as they are ipv6 only
-# flyctl secrets set TAILSCALE_AUTH_KEY=tskey-...
+app = 'flyscale'
+primary_region = 'lax'
+kill_signal = 'SIGINT'
+kill_timeout = '5s'
 
 [experimental]
-  auto_rollback = false
-  private_network = true
+
+[build]
+
+[env]
+  PORT = '41641'
+
+[http_service]
+  internal_port = 41641
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
 
 [[services]]
+  protocol = 'udp'
   internal_port = 41641
-  protocol = "udp"
-  processes = ["app"]
+  processes = ['app']
 
   [[services.ports]]
     port = 41641
 
   [services.concurrency]
-    type = "connections"
+    type = 'connections'
     hard_limit = 100
     soft_limit = 75
+
+[[vm]]
+  size = 'shared-cpu-1x'

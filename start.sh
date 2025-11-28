@@ -23,7 +23,7 @@ fi
 
 until /app/tailscale up \
     --authkey=${TAILSCALE_AUTH_KEY} \
-    --hostname=ntrance-${FLY_REGION} \
+    --hostname=fly-${FLY_REGION} \
     --advertise-exit-node \
     --ssh
 do
